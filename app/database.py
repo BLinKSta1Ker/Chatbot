@@ -14,3 +14,6 @@ redis_client = redis.StrictRedis(
 mongo_client = MongoClient(Config.MONGO_URI)
 db = mongo_client["chatbot"]
 chat_collection = db["conversations"]
+
+# Ensure user_id is indexed for faster retrieval
+chat_collection.create_index("user_id")

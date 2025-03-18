@@ -1,14 +1,28 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt, JWTManager
 from flask_limiter import Limiter
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import timedelta
-from app.database import chat_collection
+from app.database import chat_collection, redis_client
 
 auth_bp = Blueprint("auth", __name__)
+jwt = JWTManager()
 
 # Limit login attempts to prevent brute force attacks
 limiter = Limiter(key_func=lambda: request.json.get("username"))
+
+# Store blacklisted tokens in Redis
+JWT_BLACKLIST_KEY = "jwt_blacklist"
+
+def add_token_to_blacklist(jti):
+    redis_client.sadd(JWT_BLACKLIST_KEY, jti)
+
+def is_token_blacklisted(jti):
+    return redis_client.sismember(JWT_BLACKLIST_KEY, jti)
+
+@jwt.token_in_blocklist_loader
+def check_if_token_is_blacklisted(jwt_header, jwt_payload):
+    return is_token_blacklisted(jwt_payload["jti"])
 
 @auth_bp.route("/register", methods=["POST"])
 @limiter.limit("5 per minute")  # Prevent mass account creation
@@ -46,3 +60,11 @@ def login():
 
     access_token = create_access_token(identity=username, expires_delta=timedelta(hours=1))
     return jsonify({"token": access_token})
+
+
+@auth_bp.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    jti = get_jwt()["jti"]
+    add_token_to_blacklist(jti)
+    return jsonify({"message": "Logged out successfully"}), 200

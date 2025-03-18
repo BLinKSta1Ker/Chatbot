@@ -1,26 +1,29 @@
 import openai
 from app.config import Config
 from app.database import redis_client
-from models.conversation import get_chat_history, save_chat_history
+from models.conversation import save_chat_history
 
 # Initialize OpenAI client
 client = openai.OpenAI(api_key=Config.OPENAI_API_KEY)
 
 def chat_with_ai(user_id, user_input):
-    """Handles conversation with AI, using Redis for short-term memory."""
+    """Handles conversation with AI, using Redis for short-term memory, with streaming support."""
     
     # Fetch chat history from Redis (short-term memory)
     history = redis_client.lrange(user_id, 0, -1)
     messages = [{"role": "user" if i % 2 == 0 else "assistant", "content": msg} for i, msg in enumerate(history)]
     messages.append({"role": "user", "content": user_input})
 
-    # Call OpenAI API
+    # Call OpenAI API with streaming
     response = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=messages
+        messages=messages,
+        stream=True  # Enable streaming
     )
     
-    bot_reply = response.choices[0].message.content
+    bot_reply = ""
+    for chunk in response:
+        bot_reply += chunk.choices[0].delta.content or ""
 
     # Store conversation in Redis
     redis_client.rpush(user_id, user_input, bot_reply)
