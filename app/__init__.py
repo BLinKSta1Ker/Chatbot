@@ -3,7 +3,8 @@ from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from app.routes import chat_bp
-from app.auth import auth_bp  # Import authentication routes
+from app.auth import auth_bp
+from app.admin import admin_bp
 
 def create_app():
     app = Flask(__name__)
@@ -26,5 +27,6 @@ def create_app():
     # Register blueprints with rate limiting
     app.register_blueprint(chat_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp, url_prefix="/admin")
 
     return app

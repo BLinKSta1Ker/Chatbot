@@ -32,6 +32,7 @@ def is_token_blacklisted(jti):
 def check_if_token_is_blacklisted(jwt_header, jwt_payload):
     return is_token_blacklisted(jwt_payload["jti"])
 
+# Register endpoint
 @auth_bp.route("/register", methods=["POST"])
 @limiter.limit("5 per minute")
 def register():
@@ -54,6 +55,7 @@ def register():
         logging.error(f"Error in registration: {str(e)}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
 
+# Login endpoint
 @auth_bp.route("/login", methods=["POST"])
 @limiter.limit("5 per minute")
 def login():
@@ -76,6 +78,7 @@ def login():
         logging.error(f"Error in login: {str(e)}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
 
+# Logout endpoint
 @auth_bp.route("/logout", methods=["POST"])
 @jwt_required()
 def logout():
@@ -87,3 +90,27 @@ def logout():
     except Exception as e:
         logging.error(f"Error in logout: {str(e)}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+# Admin registration endpoint    
+@auth_bp.route("/register_admin", methods=["POST"])
+@limiter.limit("2 per minute")  # More strict limit for admins
+def register_admin():
+    """Register an admin user (only callable manually)."""
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+
+    if not username or not password:
+        return jsonify({"error": "Missing username or password"}), 400
+
+    if chat_collection.find_one({"user_id": username}):
+        return jsonify({"error": "User already exists"}), 400
+
+    hashed_password = generate_password_hash(password)
+    chat_collection.insert_one({
+        "user_id": username,
+        "password": hashed_password,
+        "is_admin": True  # Mark user as admin
+    })
+
+    return jsonify({"message": "Admin registered successfully"}), 201
