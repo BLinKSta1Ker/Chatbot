@@ -1,4 +1,11 @@
-# 🧠 Chatbot API (Flask + OpenAI + MongoDB + Redis)
+# Chatbot Project
+
+![Python Version](https://img.shields.io/badge/python-%3E%3D%203.8-blue)
+![Flask](https://img.shields.io/badge/Flask-%5E2.0.0-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+
+## 🧠 Chatbot API (Flask + OpenAI + MongoDB + Redis)
 
 A secure, rate-limited, JWT-authenticated chatbot API built with Flask. Supports OpenAI integration for conversational AI, user authentication, admin analytics, and chat history management.
 
@@ -54,7 +61,7 @@ Chatbot/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/chatbot.git
+git clone https://github.com/BLinKSta1Ker/Chatbot.git
 cd chatbot
 ```
 
