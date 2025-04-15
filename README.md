@@ -147,9 +147,3 @@ The app will be accessible at `http://127.0.0.1:5000/`.
 ## 📖 License
 
 This project is licensed under the MIT License.
-
----
-
-## 💬 Questions or Contributions?
-
-Feel free to open issues or submit PRs. Contributions are welcome!
