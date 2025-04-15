@@ -1,9 +1,14 @@
-# Chatbot Project
+# Chatbot
 
-![Python Version](https://img.shields.io/badge/python-%3E%3D%203.8-blue)
-![Flask](https://img.shields.io/badge/Flask-%5E2.0.0-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-
+![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![OpenAI](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
+![VSCode](https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
+![License](https://img.shields.io/badge/MIT-green?style=for-the-badge)
 
 ## 🧠 Chatbot API (Flask + OpenAI + MongoDB + Redis)
 
